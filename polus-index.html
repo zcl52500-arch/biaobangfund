@@ -1,219 +1,136 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POLUS Editor | 纯本地排版工具</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --polus-red: #8A1A24;
+            --polus-gold: #B8860B;
+            --bg-gray: #f8f9fa;
+        }
 
-<title>POLUS Editor | 标榜教育基金会排版工具</title>
+        body {
+            margin: 0;
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-gray);
+            height: 100vh;
+            overflow: hidden;
+        }
 
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+        /* 布局 */
+        .container {
+            display: flex;
+            height: 100vh;
+        }
 
-<style>
+        /* 编辑区域 */
+        .editor-side {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+        }
 
-:root{
---polus-red:#8A1A24;
---polus-gold:#B8860B;
-}
+        .toolbar {
+            padding: 15px 25px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+        }
 
-body{
-margin:0;
-font-family:Inter,sans-serif;
-background:#f5f5f5;
-}
+        textarea {
+            flex: 1;
+            padding: 30px;
+            font-size: 16px;
+            line-height: 1.8;
+            border: none;
+            outline: none;
+            resize: none;
+            color: #333;
+            background: #fcfcfc;
+        }
 
-/* layout */
+        /* 预览区域 */
+        .preview-side {
+            width: 50%;
+            padding: 40px;
+            overflow-y: auto;
+            background: var(--bg-gray);
+        }
 
-.container{
-display:flex;
-height:100vh;
-}
+        .wechat-paper {
+            background: white;
+            max-width: 450px;
+            margin: 0 auto 50px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            min-height: 80vh;
+        }
 
-/* editor */
+        /* 品牌样式 */
+        .brand { text-align: center; margin-bottom: 40px; }
+        .brand h1 { font-family: "Noto Serif SC", serif; color: var(--polus-red); font-size: 22px; margin: 0; letter-spacing: 2px; }
+        .brand small { color: #999; font-size: 12px; text-transform: uppercase; }
 
-.editor{
-width:50%;
-padding:30px;
-background:white;
-border-right:1px solid #eee;
-}
+        .main-title { font-family: "Noto Serif SC", serif; font-size: 26px; font-weight: 700; margin: 25px 0 10px; line-height: 1.4; color: #111; }
+        .sub-title { color: #666; font-size: 18px; margin-bottom: 15px; }
+        .meta { color: #999; font-size: 13px; margin-bottom: 30px; display: flex; gap: 15px; }
 
-textarea{
-width:100%;
-height:80vh;
-border:1px solid #ddd;
-padding:15px;
-font-size:15px;
-line-height:1.7;
-outline:none;
-resize:none;
-}
+        .intro { border-left: 4px solid var(--polus-red); background: #f9f2f2; padding: 20px; margin: 25px 0; color: #555; font-style: italic; }
 
-textarea:focus{
-border-color:var(--polus-red);
-}
+        .insight { margin: 40px 0 15px; }
+        .insight-label { color: var(--polus-red); font-size: 11px; letter-spacing: 2px; font-weight: 700; }
+        .insight-line { height: 2px; background: var(--polus-gold); width: 45px; margin: 8px 0 15px; }
+        .insight-title { font-size: 21px; font-family: "Noto Serif SC", serif; color: #222; }
 
-/* preview */
+        p { line-height: 1.8; color: #3f3f3f; margin: 1.2em 0; font-size: 16px; text-align: justify; }
+        strong { color: var(--polus-red); }
+        blockquote { border-left: 3px solid var(--polus-gold); padding-left: 15px; color: #666; margin: 25px 0; font-size: 0.95em; }
 
-.preview{
-width:50%;
-padding:40px;
-overflow:auto;
-}
+        .divider { text-align: center; margin: 40px 0; }
+        .divider span { display: inline-block; width: 80px; height: 1px; background: #ddd; position: relative; }
+        .divider span::after { content: '◆'; font-size: 10px; color: var(--polus-gold); position: absolute; top: -7px; left: 35px; background: white; padding: 0 5px; }
 
-.wechat{
-background:white;
-max-width:420px;
-margin:auto;
-padding:35px;
-box-shadow:0 10px 30px rgba(0,0,0,0.08);
-}
-
-/* brand header */
-
-.brand{
-text-align:center;
-margin-bottom:30px;
-}
-
-.brand h1{
-font-family:"Noto Serif SC",serif;
-color:var(--polus-red);
-font-size:20px;
-letter-spacing:1px;
-margin:0;
-}
-
-.brand small{
-color:#888;
-}
-
-/* title */
-
-.main-title{
-font-family:"Noto Serif SC",serif;
-font-size:28px;
-font-weight:700;
-margin:20px 0 10px;
-}
-
-.sub-title{
-color:#666;
-margin-bottom:10px;
-}
-
-.meta{
-color:#999;
-font-size:13px;
-margin-bottom:25px;
-}
-
-/* intro */
-
-.intro{
-border-left:4px solid var(--polus-red);
-background:#fafafa;
-padding:15px;
-margin:20px 0;
-}
-
-/* insight */
-
-.insight{
-margin:35px 0 10px;
-}
-
-.insight-label{
-color:var(--polus-red);
-font-size:12px;
-letter-spacing:2px;
-font-weight:600;
-}
-
-.insight-line{
-height:2px;
-background:var(--polus-gold);
-width:60px;
-margin:6px 0 10px;
-}
-
-.insight-title{
-font-size:20px;
-font-family:"Noto Serif SC",serif;
-}
-
-/* paragraph */
-
-p{
-line-height:1.8;
-color:#333;
-}
-
-/* quote */
-
-blockquote{
-border-left:3px solid var(--polus-gold);
-padding-left:12px;
-color:#555;
-margin:18px 0;
-}
-
-/* divider */
-
-.divider{
-text-align:center;
-margin:30px 0;
-}
-
-.divider span{
-display:inline-block;
-width:60px;
-height:2px;
-background:var(--polus-gold);
-}
-
-/* buttons */
-
-.toolbar{
-margin-bottom:15px;
-}
-
-button{
-background:var(--polus-red);
-color:white;
-border:none;
-padding:10px 14px;
-cursor:pointer;
-}
-
-button:hover{
-opacity:.9;
-}
-
-</style>
+        /* 按钮 */
+        button {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: var(--polus-red); color: white; }
+        .btn-outline { background: #eee; color: #666; }
+        button:hover { opacity: 0.8; transform: translateY(-1px); }
+        button:active { transform: translateY(0); }
+    </style>
 </head>
-
 <body>
 
 <div class="container">
-
-<div class="editor">
-
-<div class="toolbar">
-<button onclick="copyHTML()">复制公众号HTML</button>
-</div>
-
-<textarea id="input">
-
+    <div class="editor-side">
+        <div class="toolbar">
+            <button class="btn-primary" onclick="copyHTML()">复制公众号 HTML</button>
+            <button class="btn-outline" onclick="clearContent()">清空</button>
+            <span style="margin-left: auto; color: #ccc; font-size: 12px; align-self: center;">本地实时渲染模式 (No API)</span>
+        </div>
+        <textarea id="input" placeholder="在此输入内容...">
 # 谁扫银杏叶？
 @ 社区剧场观察
-% POLUS Editorial
-$ 2025
+% 标榜编辑部
+$ 2026年3月
 
 !! 在社区剧场的空间里，舞台不只是表演的地方，它也成为公共讨论的现场。
 
 ## 谁在清扫落叶？
 
-社区剧场往往由普通人组成，他们既是观众，也是参与者。
+社区剧场往往由**普通人**组成，他们既是观众，也是参与者。文字支持**加粗显示**。
 
 > 剧场并不只属于演员，它属于整个社区。
 
@@ -223,124 +140,117 @@ $ 2025
 
 ## 社区与舞台
 
-当社区进入舞台，艺术也重新回到生活。
+当社区进入舞台，艺术也重新回到生活。</textarea>
+    </div>
 
-</textarea>
-
-</div>
-
-<div class="preview">
-<div class="wechat" id="preview"></div>
-</div>
-
+    <div class="preview-side">
+        <div class="wechat-paper" id="preview"></div>
+    </div>
 </div>
 
 <script>
+    const input = document.getElementById("input");
+    const preview = document.getElementById("preview");
 
-const input=document.getElementById("input")
-const preview=document.getElementById("preview")
+    // 渲染函数
+    function render() {
+        const content = input.value;
+        localStorage.setItem('polus_content', content); // 自动保存到本地
 
-function render(){
+        const lines = content.split("\n");
+        let html = `
+            <div class="brand">
+                <h1>POLUS</h1>
+                <small>Educational Foundation</small>
+            </div>
+        `;
 
-const lines=input.value.split("\n")
+        lines.forEach(line => {
+            const rawLine = line.trim();
+            if (rawLine === "") return;
 
-let html=`
-<div class="brand">
-<h1>POLUS</h1>
-<small>Educational Foundation</small>
-</div>
-`
+            // 标题 #
+            if (line.startsWith("# ")) {
+                html += `<div class="main-title">${line.replace("# ", "")}</div>`;
+            }
+            // 副标题 @
+            else if (line.startsWith("@ ")) {
+                html += `<div class="sub-title">${line.replace("@ ", "")}</div>`;
+            }
+            // 作者 %
+            else if (line.startsWith("% ")) {
+                html += `<div class="meta"><span>✍️ ${line.replace("% ", "")}</span>`;
+            }
+            // 日期 $
+            else if (line.startsWith("$ ")) {
+                // 如果前面有作者，就并列，否则新开
+                if (html.endsWith('</span>')) {
+                    html = html.slice(0, -7) + `&nbsp;&nbsp;&nbsp;📅 ${line.replace("$ ", "")}</span></div>`;
+                } else {
+                    html += `<div class="meta"><span>📅 ${line.replace("$ ", "")}</span></div>`;
+                }
+            }
+            // 导语 !!
+            else if (line.startsWith("!! ")) {
+                html += `<div class="intro">${line.replace("!! ", "")}</div>`;
+            }
+            // 章节 ##
+            else if (line.startsWith("## ")) {
+                html += `
+                    <div class="insight">
+                        <div class="insight-label">POLUS INSIGHT</div>
+                        <div class="insight-line"></div>
+                        <div class="insight-title">${line.replace("## ", "")}</div>
+                    </div>
+                `;
+            }
+            // 引用 >
+            else if (line.startsWith("> ")) {
+                html += `<blockquote>${line.replace("> ", "")}</blockquote>`;
+            }
+            // 分割线 ---
+            else if (line.startsWith("---")) {
+                html += `<div class="divider"><span></span></div>`;
+            }
+            // 普通段落
+            else {
+                // 处理加粗 **text**
+                let pText = rawLine.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                html += `<p>${pText}</p>`;
+            }
+        });
 
-lines.forEach(line=>{
+        preview.innerHTML = html;
+    }
 
-if(line.startsWith("# ")){
+    // 复制功能
+    function copyHTML() {
+        const temp = document.createElement("textarea");
+        temp.value = preview.innerHTML;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand("copy");
+        document.body.removeChild(temp);
+        alert("已成功复制 HTML 代码，可直接粘贴至公众号后台。");
+    }
 
-html+=`<div class="main-title">${line.replace("# ","")}</div>`
+    // 清空功能
+    function clearContent() {
+        if(confirm("确定要清空所有内容吗？")) {
+            input.value = "";
+            render();
+        }
+    }
 
-}
+    // 初始化：从本地存储读取
+    const saved = localStorage.getItem('polus_content');
+    if (saved) {
+        input.value = saved;
+    }
 
-else if(line.startsWith("@ ")){
-
-html+=`<div class="sub-title">${line.replace("@ ","")}</div>`
-
-}
-
-else if(line.startsWith("% ")){
-
-html+=`<div class="meta">作者：${line.replace("% ","")}</div>`
-
-}
-
-else if(line.startsWith("$ ")){
-
-html+=`<div class="meta">日期：${line.replace("$ ","")}</div>`
-
-}
-
-else if(line.startsWith("!! ")){
-
-html+=`<div class="intro">${line.replace("!! ","")}</div>`
-
-}
-
-else if(line.startsWith("## ")){
-
-html+=`
-<div class="insight">
-<div class="insight-label">POLUS INSIGHT</div>
-<div class="insight-line"></div>
-<div class="insight-title">${line.replace("## ","")}</div>
-</div>
-`
-
-}
-
-else if(line.startsWith("> ")){
-
-html+=`<blockquote>${line.replace("> ","")}</blockquote>`
-
-}
-
-else if(line.startsWith("---")){
-
-html+=`<div class="divider"><span></span></div>`
-
-}
-
-else if(line.trim()!=""){
-
-html+=`<p>${line}</p>`
-
-}
-
-})
-
-preview.innerHTML=html
-
-}
-
-input.addEventListener("input",render)
-
-render()
-
-function copyHTML(){
-
-const temp=document.createElement("textarea")
-
-temp.value=preview.innerHTML
-
-document.body.appendChild(temp)
-
-temp.select()
-
-document.execCommand("copy")
-
-document.body.removeChild(temp)
-
-alert("公众号HTML已复制")
-
-}
-
+    // 监听输入
+    input.addEventListener("input", render);
+    render();
 </script>
 
 </body>
