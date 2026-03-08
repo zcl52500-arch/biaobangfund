@@ -1,259 +1,231 @@
-<!-- 保存为 index.html 即可直接运行 -->
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>标榜教育基金会 | 公众号排版助手</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script type="importmap">
-    {
-      "imports": {
-        "react": "https://esm.sh/react@18.2.0",
-        "react-dom": "https://esm.sh/react-dom@18.2.0",
-        "lucide-react": "https://esm.sh/lucide-react@0.263.1"
-      }
-    }
-    </script>
-    <style>
-        :root {
-            --polus-red: #8A1A24;
-            --polus-gold: #B8860B;
-        }
-        body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background-color: #f8f8f8;
-        }
-        .font-serif-sc { font-family: 'Noto Serif SC', serif; }
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        
-        /* 模拟微信后台预览框 */
-        .wechat-frame {
-            box-shadow: 0 20px 50px rgba(138, 26, 36, 0.1);
-            border: 1px solid #e5e5e5;
-        }
-        
-        /* 编辑器输入框样式 */
-        .input-focus:focus {
-            border-color: var(--polus-red);
-            box-shadow: 0 0 0 2px rgba(138, 26, 36, 0.05);
-        }
-    </style>
+<meta charset="UTF-8">
+<title>POLUS 标榜教育基金会排版助手</title>
+
+<style>
+
+body{
+background:#f4f4f4;
+font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+padding:40px;
+}
+
+.container{
+display:flex;
+gap:40px;
+}
+
+.editor{
+width:420px;
+background:white;
+padding:25px;
+border-radius:10px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+.preview{
+width:420px;
+background:white;
+padding:30px 20px;
+border-radius:10px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+overflow:auto;
+}
+
+input,textarea{
+width:100%;
+margin-bottom:12px;
+padding:10px;
+border:1px solid #ddd;
+border-radius:6px;
+font-size:14px;
+}
+
+textarea{
+height:180px;
+}
+
+button{
+background:#8A1A24;
+color:white;
+border:none;
+padding:12px;
+width:100%;
+border-radius:6px;
+font-weight:bold;
+cursor:pointer;
+margin-top:6px;
+}
+
+button:hover{
+background:black;
+}
+
+</style>
+
 </head>
+
 <body>
-    <div id="root"></div>
 
-    <script type="module">
-        import React, { useState, useRef, useEffect } from 'react';
-        import ReactDOM from 'react-dom';
-        import { 
-            Type, 
-            Image as ImageIcon, 
-            MessageSquare, 
-            Copy, 
-            Eye, 
-            Edit3, 
-            ChevronRight,
-            CheckCircle2,
-            Info
-        } from 'lucide-react';
+<div class="container">
 
-        // --- 常量定义 ---
-        const THEME_COLOR = '#8A1A24';
-        const ACCENT_COLOR = '#B8860B';
+<div class="editor">
 
-        const INITIAL_DATA = {
-            mainTitle: '谁扫银杏叶？',
-            subTitle: '社区剧场首演圆满落幕',
-            author: '标榜教育基金会',
-            date: '2026.01.29',
-            intro: '【这一刻，舞台上的光，照亮的是我们共同的生活。】\n\n“楼道灯坏了，谁来修？”\n“落叶满了院子，谁来扫？”',
-            sections: [
-                { title: '自然生长 / Natural Growth', type: 'text', content: '这不是一个被“编写”出来的剧本，而是一段被“共同经历”出来的叙事。' },
-                { title: '参演居民心声 / Resident Voices', type: 'reflection', items: ['侯远芝：年纪大了，更要开心。', '石晓玲：第一次上舞台，真的很激动。'] }
-            ],
-            conclusion: '叶落归根，戏散情留。'
-        };
+<h3>POLUS排版助手</h3>
 
-        // --- 子组件：微信文章渲染核心 ---
-        const WeChatRenderer = React.forwardRef(({ data }, ref) => {
-            return (
-                <section ref={ref} style={{ backgroundColor: '#fff', padding: '40px 20px', fontSize: '16px', color: '#333', lineHeight: '1.8', textAlign: 'justify' }}>
-                    {/* Header */}
-                    <section style={{ textAlign: 'center', marginBottom: '50px' }}>
-                        <section style={{ fontSize: '22px', fontWeight: 'bold', color: THEME_COLOR, letterSpacing: '12px' }}>POLUS</section>
-                        <section style={{ fontSize: '8px', color: '#999', letterSpacing: '3px', marginTop: '4px' }}>Educational Foundation</section>
-                        <section style={{ width: '15px', height: '1.5px', backgroundColor: ACCENT_COLOR, margin: '15px auto 0 auto' }}></section>
-                    </section>
+<input id="title" placeholder="文章标题">
 
-                    {/* Title */}
-                    <section style={{ textAlign: 'center', marginBottom: '45px' }}>
-                        <section style={{ fontSize: '26px', fontWeight: 'bold', color: '#111', lineHeight: '1.4', marginBottom: '15px' }}>{data.mainTitle}</section>
-                        <section style={{ fontSize: '15px', color: THEME_COLOR, letterSpacing: '4px', fontWeight: 'bold', marginBottom: '25px' }}>{data.subTitle}</section>
-                        <section style={{ fontSize: '11px', color: '#BBB' }}>{data.author} | {data.date}</section>
-                    </section>
+<input id="subtitle" placeholder="副标题">
 
-                    {/* Intro */}
-                    <section style={{ margin: '35px 0', padding: '25px', backgroundColor: '#FAFAFA', borderLeft: `3px solid ${THEME_COLOR}`, color: '#666' }}>
-                        {data.intro.split('\n').map((p, i) => <section key={i} style={{ marginBottom: '10px' }}>{p}</section>)}
-                    </section>
+<input id="author" placeholder="作者">
 
-                    {/* Content Sections */}
-                    {data.sections.map((s, idx) => (
-                        <section key={idx} style={{ marginBottom: '40px' }}>
-                            {s.title && (
-                                <section style={{ margin: '60px 0 35px 0', textAlign: 'center' }}>
-                                    <section style={{ fontSize: '10px', color: THEME_COLOR, letterSpacing: '4px', fontWeight: 'bold', opacity: 0.6 }}>CHAPTER / {String(idx + 1).padStart(2, '0')}</section>
-                                    <section style={{ width: '25px', height: '1.5px', backgroundColor: ACCENT_COLOR, margin: '10px auto 15px auto' }}></section>
-                                    <section style={{ fontSize: '20px', fontWeight: 'bold', color: '#000' }}>{s.title}</section>
-                                </section>
-                            )}
-                            {s.type === 'text' && <section style={{ whiteSpace: 'pre-line' }}>{s.content}</section>}
-                            {s.type === 'reflection' && s.items.map((item, i) => (
-                                <section key={i} style={{ marginBottom: '25px', paddingLeft: '20px', borderLeft: `1px solid ${THEME_COLOR}` }}>
-                                    <section style={{ fontSize: '15px', lineHeight: '1.9' }}>{item}</section>
-                                </section>
-                            ))}
-                        </section>
-                    ))}
+<input id="date" placeholder="日期">
 
-                    {/* Footer */}
-                    <section style={{ marginTop: '80px', borderTop: '1px solid #EEE', textAlign: 'center', paddingTop: '40px' }}>
-                        <section style={{ fontSize: '10px', color: THEME_COLOR, letterSpacing: '10px', marginBottom: '20px' }}>END</section>
-                        <section style={{ fontSize: '14px', color: '#999' }}>POLUS INTERNATIONAL EDUCATION FOUNDATION</section>
-                    </section>
-                </section>
-            );
-        });
+<textarea id="content" placeholder="正文（段落换行即可）"></textarea>
 
-        // --- 主应用组件 ---
-        function App() {
-            const [data, setData] = useState(INITIAL_DATA);
-            const [activeTab, setActiveTab] = useState('edit');
-            const [copyStatus, setCopyStatus] = useState(false);
-            const articleRef = useRef(null);
+<button onclick="render()">生成排版</button>
 
-            const handleCopy = async () => {
-                if (!articleRef.current) return;
-                const html = articleRef.current.innerHTML;
-                const text = articleRef.current.innerText;
-                
-                try {
-                    const blob = new Blob([html], { type: 'text/html' });
-                    const textBlob = new Blob([text], { type: 'text/plain' });
-                    await navigator.clipboard.write([
-                        new ClipboardItem({ 'text/html': blob, 'text/plain': textBlob })
-                    ]);
-                    setCopyStatus(true);
-                    setTimeout(() => setCopyStatus(false), 3000);
-                } catch (err) {
-                    alert('复制失败，请手动选择内容复制');
-                }
-            };
+<button onclick="copy()">复制到公众号</button>
 
-            return (
-                <div className="flex h-screen overflow-hidden bg-[#f4f4f4]">
-                    {/* 左侧：标榜风格侧边栏 */}
-                    <aside className="w-[420px] bg-white border-r flex flex-col shadow-xl z-10">
-                        <header className="p-6 border-b flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-[#8A1A24] rounded-lg flex items-center justify-center text-white font-serif-sc text-xl font-bold">P</div>
-                                <div>
-                                    <h1 className="text-xs font-bold tracking-[3px] text-gray-800 uppercase">Polus Formatter</h1>
-                                    <p className="text-[9px] text-gray-400 font-medium">标榜教育基金会排版助手</p>
-                                </div>
-                            </div>
-                            <div className="flex bg-gray-100 p-1 rounded-lg">
-                                <button onClick={() => setActiveTab('edit')} className={`p-2 rounded-md transition-all ${activeTab === 'edit' ? 'bg-white shadow-sm text-[#8A1A24]' : 'text-gray-400'}`}><Edit3 size={16}/></button>
-                                <button onClick={() => setActiveTab('preview')} className={`p-2 rounded-md transition-all ${activeTab === 'preview' ? 'bg-white shadow-sm text-[#8A1A24]' : 'text-gray-400'}`}><Eye size={16}/></button>
-                            </div>
-                        </header>
+</div>
 
-                        <div className="flex-1 overflow-y-auto p-6 space-y-8 scrollbar-hide">
-                            <section className="space-y-4">
-                                <h2 className="text-[10px] font-bold text-[#8A1A24] tracking-widest uppercase flex items-center gap-2">
-                                    <Type size={12}/> 基础信息 / Metadata
-                                </h2>
-                                <input className="w-full p-3 bg-gray-50 rounded-xl text-sm font-bold border border-transparent focus:border-[#8A1A24] outline-none transition-all" value={data.mainTitle} onChange={e => setData({...data, mainTitle: e.target.value})} placeholder="主标题" />
-                                <input className="w-full p-3 bg-gray-50 rounded-xl text-xs border border-transparent focus:border-[#8A1A24] outline-none transition-all" value={data.subTitle} onChange={e => setData({...data, subTitle: e.target.value})} placeholder="副标题" />
-                                <div className="flex gap-2">
-                                    <input className="flex-1 p-3 bg-gray-50 rounded-xl text-xs border border-transparent focus:border-[#8A1A24] outline-none" value={data.author} onChange={e => setData({...data, author: e.target.value})} placeholder="作者" />
-                                    <input className="flex-1 p-3 bg-gray-50 rounded-xl text-xs border border-transparent focus:border-[#8A1A24] outline-none" value={data.date} onChange={e => setData({...data, date: e.target.value})} placeholder="日期" />
-                                </div>
-                                <textarea className="w-full p-3 bg-gray-50 rounded-xl text-xs min-h-[100px] border border-transparent focus:border-[#8A1A24] outline-none" value={data.intro} onChange={e => setData({...data, intro: e.target.value})} placeholder="导语部分..." />
-                            </section>
 
-                            <section className="space-y-4">
-                                <h2 className="text-[10px] font-bold text-[#8A1A24] tracking-widest uppercase flex items-center gap-2">
-                                    <ImageIcon size={12}/> 内容章节 / Chapters
-                                </h2>
-                                {data.sections.map((s, i) => (
-                                    <div key={i} className="p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-3">
-                                        <input className="w-full bg-transparent border-b border-gray-200 text-xs font-bold py-1 focus:border-[#8A1A24] outline-none" value={s.title} onChange={e => {
-                                            const next = [...data.sections];
-                                            next[i].title = e.target.value;
-                                            setData({...data, sections: next});
-                                        }} />
-                                        {s.type === 'text' ? (
-                                            <textarea className="w-full bg-white p-3 text-xs rounded-xl shadow-sm border-none min-h-[80px]" value={s.content} onChange={e => {
-                                                const next = [...data.sections];
-                                                next[i].content = e.target.value;
-                                                setData({...data, sections: next});
-                                            }} />
-                                        ) : (
-                                            <div className="space-y-2">
-                                                {s.items.map((item, j) => (
-                                                    <input key={j} className="w-full bg-white p-2 text-[10px] rounded-lg shadow-sm border-none" value={item} onChange={e => {
-                                                        const next = [...data.sections];
-                                                        next[i].items[j] = e.target.value;
-                                                        setData({...data, sections: next});
-                                                    }} />
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-                            </section>
-                        </div>
+<div id="preview" class="preview"></div>
 
-                        <footer className="p-6 border-t bg-white">
-                            <button onClick={handleCopy} className="w-full bg-[#8A1A24] text-white py-4 rounded-2xl font-bold text-xs tracking-[4px] shadow-lg shadow-red-900/20 hover:bg-black transition-all flex items-center justify-center gap-2">
-                                <Copy size={16}/> 一键复制富文本
-                            </button>
-                            <div className="mt-4 flex items-start gap-2 p-3 bg-amber-50 rounded-xl text-[10px] text-amber-800 leading-relaxed">
-                                <Info size={14} className="shrink-0 mt-0.5"/>
-                                <p>复制后直接前往微信公众号后台，在正文区域 <strong>Ctrl+V</strong> 粘贴，即可完美保留所有视觉设计。</p>
-                            </div>
-                        </footer>
-                    </aside>
+</div>
 
-                    {/* 右侧：实时预览 */}
-                    <main className="flex-1 flex flex-col items-center justify-center p-10 relative">
-                        <div className="wechat-frame w-full max-w-[420px] h-[85vh] bg-white rounded-lg overflow-hidden flex flex-col">
-                            <div className="h-10 bg-[#f2f2f2] flex items-center justify-between px-4 border-b">
-                                <div className="flex gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]"></div><div className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]"></div><div className="w-2.5 h-2.5 rounded-full bg-[#27c93f]"></div></div>
-                                <div className="text-[10px] font-bold text-gray-400 tracking-widest">WECHAT PREVIEW</div>
-                                <div className="w-6"></div>
-                            </div>
-                            <div className="flex-1 overflow-y-auto scrollbar-hide">
-                                <WeChatRenderer ref={articleRef} data={data} />
-                            </div>
-                        </div>
-                        
-                        {/* 成功提示 */}
-                        {copyStatus && (
-                            <div className="absolute top-10 bg-black text-white px-8 py-4 rounded-full flex items-center gap-3 animate-bounce shadow-2xl">
-                                <CheckCircle2 className="text-green-400" size={20}/>
-                                <span className="text-xs font-bold tracking-widest">富文本已锁定，请前往公众号粘贴！</span>
-                            </div>
-                        )}
-                    </main>
-                </div>
-            );
-        }
 
-        ReactDOM.render(<App />, document.getElementById('root'));
-    </script>
+<script>
+
+function render(){
+
+let title=document.getElementById("title").value
+let subtitle=document.getElementById("subtitle").value
+let author=document.getElementById("author").value
+let date=document.getElementById("date").value
+let content=document.getElementById("content").value
+
+content=content.replace(/\n/g,"</p><p>")
+
+let html=`
+
+<section style="font-size:16px;color:#333;line-height:1.8">
+
+<section style="text-align:center;margin-bottom:40px">
+
+<div style="
+font-size:22px;
+letter-spacing:12px;
+font-weight:bold;
+color:#8A1A24
+">POLUS</div>
+
+<div style="
+font-size:10px;
+letter-spacing:3px;
+color:#999
+">Educational Foundation</div>
+
+<div style="
+width:20px;
+height:2px;
+background:#B8860B;
+margin:14px auto
+"></div>
+
+</section>
+
+<section style="text-align:center;margin-bottom:40px">
+
+<h1 style="
+font-size:26px;
+font-weight:bold;
+line-height:1.4;
+margin-bottom:10px
+">
+${title}
+</h1>
+
+<div style="
+color:#8A1A24;
+font-weight:bold;
+letter-spacing:3px;
+margin-bottom:10px
+">
+${subtitle}
+</div>
+
+<div style="font-size:12px;color:#999">
+${author} ｜ ${date}
+</div>
+
+</section>
+
+
+<section style="
+background:#fafafa;
+padding:20px;
+border-left:3px solid #8A1A24;
+margin-bottom:30px
+">
+
+<p>${content}</p>
+
+</section>
+
+<section style="
+text-align:center;
+margin-top:60px;
+border-top:1px solid #eee;
+padding-top:30px
+">
+
+<div style="
+letter-spacing:10px;
+color:#8A1A24;
+font-size:12px;
+margin-bottom:10px
+">END</div>
+
+<div style="color:#999;font-size:12px">
+POLUS INTERNATIONAL EDUCATION FOUNDATION
+</div>
+
+</section>
+
+</section>
+
+`
+
+document.getElementById("preview").innerHTML=html
+
+}
+
+
+function copy(){
+
+let node=document.getElementById("preview")
+
+let html=node.innerHTML
+let text=node.innerText
+
+let blob=new Blob([html],{type:"text/html"})
+let textBlob=new Blob([text],{type:"text/plain"})
+
+navigator.clipboard.write([
+new ClipboardItem({
+"text/html":blob,
+"text/plain":textBlob
+})
+])
+
+alert("已复制，请直接粘贴到公众号后台")
+
+}
+
+</script>
+
 </body>
 </html>
